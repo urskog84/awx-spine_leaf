@@ -1,0 +1,36 @@
+---
+- name: debug 
+  debug: msg="host is {{item}}  - " 
+  with_items: "{{ groups['spine'] }}"
+  
+
+- name: Generate configuration files 
+  template: src=spine.j2 dest=/home/petter/ansible/CONFIGS/{{ item }}.cfg
+  with_items: "{{ groups['spine'] }}"
+  delegate_to: localhost  
+
+- name: Configure VPC Link
+  nxapi_interfaces: inteface={{item}} description='VPC link' mode=layer2 host={{ invetrory_hostname }}
+  with_items:
+    - Ethernet1/1
+    - Ethernet1/2
+
+- name: Configure VPC KeeapAlive Link
+  nxapi_interfaces: inteface={{item}} description='VPC keepalive link' mode=layer2 host={{ invetrory_hostname }}
+  with_items:
+    - Ethernet2/12
+
+- name: Configure Down link to leaf
+  nxapi_interfaces: inteface={{item}} description='Downlink to leaf' mode=layer3 host={{ invetrory_hostname }}
+  with_items:
+    - Ethernet2/1
+
+- name: Add VLANS
+  nxos_vlan:
+    vlan_id: {{ item.id }}
+    name: {{ item.name}}
+    admin_state: up 
+    with_items:
+    - { name: 'vlan 1', id: 1 }
+    - { name: 'vlan 2', id: 2 }
+

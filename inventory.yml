@@ -1,0 +1,22 @@
+[spine]
+spinedh1 loopback=10.10.10.10
+spinehd2 loopback=20.20.20.20
+
+[leaf]
+leafdh1-1
+leafdh1-2
+leafdh1-1
+leafdh1-2
+
+
+[datacenter:children]
+spine
+leaf
+
+
+[datacenter:vars]
+dnsserver1=192.188.2.84
+dnsserver2=192.188.2.100
+syslogserver=172.24.14.61
+self_destruct_countdown=60
+escape_pods=2

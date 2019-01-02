@@ -1,0 +1,19 @@
+no service pad
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+!
+hostname {{item}}
+!
+interface loopback 0
+ ip address {{ hostvars[item].loopback }} 255.255.255.0
+!
+enable secret {{ hostvars[item].loopback }}
+boot-start-marker
+boot-end-marker
+!
+logging buffered 32000
+no logging console
+loggig host {{ syslogserver }}

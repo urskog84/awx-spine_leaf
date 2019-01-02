@@ -1,0 +1,10 @@
+---
+
+- name: Generate Spine Configuration Files 
+  hosts: spine
+  gather_facts: no
+
+  roles: 
+   - spine
+
+
